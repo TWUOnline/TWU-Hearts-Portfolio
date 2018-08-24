@@ -1,0 +1,65 @@
+/*
+Theme Name: 	TWU Hearts Portfolio
+Theme URI: 		https://github.com/TWUOnline/TWU-Hearts-Portfolio
+Description: 	A warming, visually driven theme (Child of Argent) for Trinity Western University Students to create a learning portfolio. 
+Version: 		0.2
+Template:       argent
+Author: 		CogDog
+Author URI: 	https://cog.dog/
+License: GNU General Public License v2.0 & Apache License 2.0
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+.taxonomy-description {
+    text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+	.single-twu-portfolio .entry-content {
+		margin-right: 2em;
+		margin-left: 2em;
+	}
+	.single-twu-portfolio .entry-footer {
+		margin-right: 3em;
+		margin-left: 3em;
+	}
+}
+
+	
+@media screen and (min-width: 768px) {
+	.single-twu-portfolio .entry-header,
+	.single-twu-portfolio .entry-content,
+	.single-twu-portfolio .hentry {
+		margin-right: auto;
+		margin-left: auto;
+		width: 660px;
+	}
+	
+
+	.single-twu-portfolio .entry-meta {
+    	float: left;
+    	margin-top: 0;
+    	margin-right: 20px;
+    	width: 150px;
+	}
+	
+	.single-twu-portfolio .entry-content {
+		float: left;
+		width: 490px;
+	}
+}
+
+
+.single-twu-portfolio .entry-meta  {
+	margin-top: 2.6667em;
+}
+
+.single-twu-portfolio .cat-links,
+.single-twu-portfolio .tags-links {
+	display: block;
+	margin-top: 0;
+}
+
+.single-twu-portfolio .entry-content {
+	padding-left: 0;
+}
