@@ -7,7 +7,7 @@
 ?>
 
 <header class="page-header">
-	<?php twu_inspire_portfolio_title( '<h1 class="page-title">', '</h1>' ); ?>
+	<?php twu_hearts_portfolio_title( '<h1 class="page-title">', '</h1>' ); ?>
 
 
 	<?php twu_inspire_portfolio_content( '<div class="taxonomy-description">', '</div>' ); ?>

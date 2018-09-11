@@ -1,6 +1,19 @@
 <?php
 /* Functions to modify parent theme for TRU portfolios
                                                                  */
+# -----------------------------------------------------------------
+# Theme Setup
+# -----------------------------------------------------------------
+
+
+
+add_action( 'after_setup_theme', 'twu_hearts_setup');
+
+function twu_hearts_setup() {
+	
+	//register support for portfolio features
+	add_theme_support( 'twu-portfolio' );
+}
 
 
 # -----------------------------------------------------------------
@@ -23,7 +36,13 @@ function twu_portfolio_enqueues() {
 
 add_action('wp_enqueue_scripts', 'twu_portfolio_enqueues');
 
-/* stop jetpack nags 
+
+# -----------------------------------------------------------------
+# General TWU Portfolio Stuff
+# -----------------------------------------------------------------
+
+
+/* stop jetpack nags with css for admin
 	h/t https://gist.github.com/digisavvy/174a8a65accce24d9bc8c8f2441e9bdb     */
 	
 function twu_portfolio_admin_theme_style() {
@@ -36,12 +55,139 @@ function twu_portfolio_admin_theme_style() {
 add_action('admin_enqueue_scripts', 'twu_portfolio_admin_theme_style');
 
 
+/* Clean up the +New menu to put "Artifacts" at top, remove "Media" / "User"
+   Add a custom menu for TWU (hard wired for now)                            */
+   
+function twu_portfolio_adminbar() {
+
+	// admin bar needs to be known globally
+	global $wp_admin_bar;
+	
+	// remove all items from New Content menu
+	$wp_admin_bar->remove_node('new-post');
+	$wp_admin_bar->remove_node('new-media');
+	$wp_admin_bar->remove_node('new-page');
+	$wp_admin_bar->remove_node('new-user');
+	
+	// add back the new Post link
+	$args = array(
+		'id'     => 'new-post',    
+		'title'  => 'Blog Post', 
+		'parent' => 'new-content',
+		'href'  => admin_url( 'post-new.php' ),
+		'meta'  => array( 'class' => 'ab-item' )
+	);
+	$wp_admin_bar->add_node( $args );
+
+	// add back the new Page 
+	$args = array(
+		'id'     => 'new-page',    
+		'title'  => 'Page', 
+		'parent' => 'new-content',
+		'href'  => admin_url( 'post-new.php?post_type=page' ),
+		'meta'  => array( 'class' => 'ab-item' )
+	);
+	$wp_admin_bar->add_node( $args );
+
+
+	// add a top menu for the TWU Create links
+	$args = array(
+		'id'    => 'twu-portfolio',
+		'title' => 'TWU Create',
+		'href'  => 'https://create.twu.ca/',
+		'meta'  => array(
+			'title' => __('TWU Create'),            
+		),
+	);
+	
+	$wp_admin_bar->add_menu( $args );
+
+	$args = array(
+		'id'    => 'portfolio',
+		'parent' => 'twu-portfolio',
+		'title' => 'E-Portfolio Help',
+		'href'  => 'http://create.twu.ca/eportfolios',
+		'meta'  => array(
+			'title' => __('TWU E-Portfolio information and documentation'),
+			'target' => '_blank',
+			'class' => ''
+		),
+	);
+	
+	$wp_admin_bar->add_menu( $args );
+
+	$args = array(
+		'id'    => 'wordpress-guide',
+		'parent' => 'twu-portfolio',
+		'title' => 'WordPress Guide',
+		'href'  => 'http://create.twu.ca/eportfolios/wordpress/',
+		'meta'  => array(
+			'title' => __('TWU Eportfolio WordPress Guide'),
+			'target' => '_blank',
+			'class' => ''
+		),
+	);
+	
+	$wp_admin_bar->add_menu( $args );
+	
+	$args = array(
+		'id'    => 'wordpress-glossary',
+		'parent' => 'twu-portfolio',
+		'title' => 'WordPress Glossary',
+		'href'  => 'https://www.wpglossary.net/',
+		'meta'  => array(
+			'title' => __('Definitions of words that you come in contact with when you use WordPress'),
+			'target' => '_blank',
+			'class' => ''
+		),
+	);
+
+	$wp_admin_bar->add_menu( $args );	
+	
+	$args = array(
+		'id'    => 'theme-guide',
+		'parent' => 'twu-portfolio',
+		'title' => 'TWU Hearts Theme',
+		'href'  => 'http://create.twu.ca/eportfolios/portfolio-themes/twu-hearts/',
+		'meta'  => array(
+			'title' => __('Using the TWU Hearts theme'),
+			'target' => '_blank',
+			'class' => ''
+		),
+	);
+	
+	$wp_admin_bar->add_menu( $args );
+}
+
+add_action( 'wp_before_admin_bar_render', 'twu_portfolio_adminbar', 99 );
+
+function twu_portfolio_dashboard_widgets() {
+	wp_add_dashboard_widget('twu_portfolio_admin', 'Your TWU Portfolio', 'twu_portfolio_make_dashboard_widget');
+}
+
+function twu_portfolio_make_dashboard_widget() {
+	echo '<p>There are currently <strong>' . twu_artifact_count() . '</strong> artifacts in your portfolio.</p>
+	<ul>
+		<li><a href="' . get_post_type_archive_link( 'twu-portfolio' ) . '" target="_blank">See all artifacts</a><li>
+		<li><a href="' . admin_url( 'edit.php?post_type=twu-portfolio') . '">Manage your artifacts</a></li>	
+		<li><a href="' . admin_url( 'post-new.php?post_type=twu-portfolio') . '">Create a new artifact</a></li>
+	
+	 </ul>';
+}
+
+add_action('wp_dashboard_setup', 'twu_portfolio_dashboard_widgets');
+
+function twu_artifact_count() {
+	return wp_count_posts('twu-portfolio')->publish;
+}
+
+
 # -----------------------------------------------------------------
-# Portfolio Functions, taken off the jetpack
+# Portfolio Functions, taken off the jetpack code for parent theme
 # -----------------------------------------------------------------
 
 // headings for archives
-function twu_inspire_portfolio_title( $before = '', $after = '', $is_archive=false ) {
+function twu_hearts_portfolio_title( $before = '', $after = '', $is_archive=false ) {
 	$title = '';
 
 	if ( is_post_type_archive( 'twu-portfolio' ) ) {
@@ -83,4 +229,10 @@ return $pages_templates;
 }
 
 add_filter( 'theme_page_templates', 'twu_hearts_remove_page_template' );
+
+
+// Load enhancement file to display admin notices.
+require get_stylesheet_directory() . '/inc/twu-hearts-enhancements.php';
+
+
 ?>
