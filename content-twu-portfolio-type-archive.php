@@ -1,6 +1,6 @@
 <?php
 /**
- * The template used for displaying Portfolio  Archive view
+ * The template used for displaying Portfolio Archive view
  *
  * @package Argent
  */
@@ -8,13 +8,22 @@
 
 <header class="page-header">
 
-	<h1 class="page-title"><?php _e( 'All My Artifacts', 'argent' );?> (<?php echo wp_count_posts('twu-portfolio')->publish?> total)</h1>
+		<h1><?php
+				$term_obj =	get_queried_object(); // the term we need for this taxonomy
+
+				$term = get_term( $term_obj->term_id, 'twu-portfolio-type' );
+
+				$tax_count = twu_portfolio_tax_count('twu-portfolio-type', $term->slug);
+
+				$plural = ( $tax_count == 1) ? '' : 's';
+
+				echo $tax_count . ' Artifact' . $plural . ' of Type "' . $term->name . '"';
+			?></h1>
 
 
-	<div class="taxonomy-description">
-		<?php twu_hearts_portfolio_tagline()?>
-	</div>
-</header>
+
+	<?php twu_hearts_portfolio_content( '<div class="taxonomy-description">', '</div>' ); ?>
+</header><!-- .page-header -->
 
 <div id="portfolio-wrapper">
 	<?php /* Start the Loop */ ?>

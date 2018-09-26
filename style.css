@@ -2,7 +2,7 @@
 Theme Name: 	TWU Hearts Portfolio
 Theme URI: 		https://github.com/TWUOnline/TWU-Hearts-Portfolio
 Description: 	A warming, visually driven theme (Child of Argent) for Trinity Western University Students to create a learning portfolio. 
-Version: 		0.3
+Version: 		0.5
 Template:       argent
 Author: 		CogDog
 Author URI: 	https://cog.dog/
@@ -12,6 +12,16 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 .taxonomy-description {
     text-align: center;
+    line-height: 1.4;
+    margin-bottom: 2em;
+}
+
+.home h2.section-title {
+    text-align: center;
+}
+
+.no-results .search-form input[type="search"] {
+    width: 79%;
 }
 
 @media screen and (max-width: 767px) {
